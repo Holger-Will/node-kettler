@@ -1,0 +1,119 @@
+[
+  {
+    "name":"5km",
+    "desc": "it's a start"
+    "distance":5000,
+    "image": "5km.svg"
+  },
+  {
+    "name":"10km",
+    "desc": "let's do it"
+    "distance":10000,
+    "image": "10km.svg"
+  },
+  {
+    "name":"20km",
+    "desc": "now we are at it"
+    "distance":20000,
+    "image": "20km.svg"
+  },
+  {
+    "name":"50km",
+    "desc": "go!go!go!
+    "distance":50000,
+    "image": "50km.svg"
+  },
+  {
+    "name":"100km",
+    "desc": "EINHUNDERT!!!!"
+    "distance":100000,
+    "image": "100km.svg"
+  },
+  {
+    "name":"Potsdammer Platz",
+    "desc": "the Place to be"
+    "distance":11000,
+    "image": "Potsdamer-Platz-Hochhaeuser-2015.jpg"
+  }
+]
+
+
+Berlin
+Hamburg
+München
+Köln
+Frankfurt am Main
+Stuttgart
+Düsseldorf
+Dortmund
+Essen
+Leipzig
+Bremen
+Dresden
+Hannover
+Nürnberg
+Duisburg
+Bochum
+Wuppertal
+Bielefeld
+Bonn
+Münster
+Karlsruhe
+Mannheim
+Augsburg
+Wiesbaden
+Gelsenkirchen
+Mönchen­gladbach
+Braunschweig
+Chemnitz
+Kiel
+Aachen
+Halle (Saale)
+Magdeburg
+Freiburg im Breisgau
+Krefeld
+Lübeck
+Oberhausen
+Erfurt
+Mainz
+Rostock
+Kassel
+Hagen
+Hamm
+Saarbrücken
+Mülheim an der Ruhr
+Potsdam
+Ludwigshafen am Rhein
+Oldenburg
+Leverkusen
+Osnabrück
+Solingen
+Heidelberg
+Herne
+Neuss
+Darmstadt
+Paderborn
+Regensburg
+Ingolstadt
+Würzburg
+Fürth
+Wolfsburg
+Offenbach
+Ulm
+Heilbronn
+Pforzheim
+Göttingen
+Bottrop
+Trier
+Recklinghausen
+Reutlingen
+Bremer­haven
+Koblenz
+Bergisch Gladbach
+Jena
+Remscheid
+Erlangen
+Moers
+Siegen
+Hildesheim
+Salzgitter

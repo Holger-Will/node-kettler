@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Test</title>
+    <link rel="stylesheet" href="main.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
+    <script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
+  <script src="app.js"></script>
+  <script src="md5.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Black+Ops+One" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Squada+One" rel="stylesheet">
+  <meta name="viewport" content="width=device-width">
+  </head>
+  <body>
+    <div id="main_container">
+      <div id="header"><div id="user_info">
+          <img id="user_img" src="img/user.svg"/>
+          <div id="user_name">Neuer Benutzer</div>
+      </div>
+      <button onclick="logout()">logout</button>
+      <button id="workout_btn" onclick="show_workout()">Workout</button>
+      <button id="listworkouts_btn" onclick="listworkouts()">List</button>
+    </div>
+
+      <div id="content">
+        <div class="page" id="workout_main">
+          <div class="card"  id="workout">
+            <div id="SpeedGauge"></div>
+          </div>
+          <div class="card" id="workout_details">
+            <button id="stop_btn" onclick="stop()">stop</button>
+            <button id="start_btn" onclick="start()" style="display:none">start</button>
+          </div>
+        </div>
+        <div class="page" id="workout_list" style="display:none">
+
+        </div>
+    </div>
+      <div id="footer"></div>
+    </div>
+
+
+    <div id="users">
+      <div class="user_select">
+        <img src="img/user.svg"/>
+        <div>Neuer Benutzer</div>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+  <script>
+  var cUser = null
+  var noSleep = new NoSleep();
+    $.get("/listusers",function(data){
+      data.forEach(function(value,index){
+        $("#users").prepend(`<div class="user_select" onclick="login('${value.mail}')"><img src="https://www.gravatar.com/avatar/${md5(value.mail)}?s=200"/><div>${value.name}</div></div>`)
+      })
+    })
+    function login(id){
+      $.get("/login?u="+id,function(data){
+        cUser=data
+        user_img.src="https://www.gravatar.com/avatar/"+md5(cUser.mail)+"?s=50"
+        user_name.innerHTML=data.name
+        users.style.display="none"
+        $.get("/start",function(data){})
+      })
+
+      //users.style.display="none"
+    }
+
+    function logout(id){
+        $.get("/logout",function(data){
+          cUser=null
+          user_img.src="img/user.svg"
+          user_name.innerHTML="Neuer Benutzer"
+          users.style.display="flex"
+        })
+
+      //users.style.display="none"
+    }
+    function show_workout(){
+      workout_main.style.display="flex"
+      workout_list.style.display="none"
+    }
+    function listworkouts(){
+      workout_main.style.display="none"
+      workout_list.style.display="flex"
+      $.get("/getCurrentUser",function(data){
+        workout_list.innerHTML=""
+        data.workouts.forEach(function(item,index){
+          var d = document.createElement("div")
+          d.setAttribute("class","card")
+          var dt = new Date(item.timestamp)
+          d.innerHTML=`
+            <div class="datetime">
+              <span class="date">${dt.getDate()}.${dt.getMonth()+1}.${dt.getFullYear()}</span>
+              <span class="time">${dt.getHours()}:${dt.getMinutes()}</span>
+            </div>
+            <div>
+              Strecke: ${item.distance} km
+            </div>
+            <div>
+              Dauer: ${item.time} s
+            </div>
+            <div>
+              Energie: ${Math.floor(item.energy*10)/10} kcal
+            </div>
+            <div>
+              avg Speed: ${item.speed_avg} km/h
+            </div>
+            <div>
+              avg Power: ${item.rp_avg} W
+            </div>
+            <div>
+              avg RPM: ${item.rpm_avg} Umin
+            </div>
+          `
+          workout_list.appendChild(d)
+        })
+      })
+    }
+    function reset(){
+      $.get("/reset",function(data){})
+    }
+    function stop(){
+      $.get("/stop",function(data){})
+    }
+    function start(){
+      $.get("/start",function(data){})
+    }
+
+    var socket = io();
+
+    socket.on("speed",function(data){
+      speed.setValue(data)
+      G1.setValue(data)
+    })
+    socket.on("distance",function(data){
+      distance.setValue(data)
+    })
+    socket.on("data",function(data){
+      console.log(data)
+    })
+
+    socket.on("award",function(data){
+      toastr.success(`${data.desc}`,data.name)
+    })
+
+    socket.on("training started",function(data){
+      stop_btn.style.display="inline-block"
+      start_btn.style.display="none"
+      toastr.success('training started')
+      users.style.display="none"
+      noSleep.enable();
+    })
+    socket.on("training stoped",function(data){
+      start_btn.style.display="inline-block"
+      stop_btn.style.display="none"
+      toastr.warning('training stoped')
+      noSleep.disable();
+    })
+    socket.on("loged out",function(data){
+      users.style.display="flex"
+      noSleep.disable();
+    })
+
+    socket.on("user",function(data){
+      totaldistance.setValue(data.totaldistance)
+      totalenergy.setValue(data.totalenergy)
+      totaltime.setValue(data.totaltime)
+    })
+
+    var speed= new Digit_Display(2,1,"km/h")
+    speed.setValue(0)
+    workout_details.appendChild(speed.shadow)
+
+    var distance= new Digit_Display(3,2,"km")
+    distance.setValue(0)
+    workout_details.appendChild(distance.shadow)
+
+    var totaldistance= new Digit_Display(6,1,"km")
+    totaldistance.setValue(0)
+    footer.appendChild(totaldistance.shadow)
+
+    var totalenergy= new Digit_Display(6,1,"kcal")
+    totalenergy.setValue(0)
+    footer.appendChild(totalenergy.shadow)
+
+    var totaltime= new Digit_Display(6,1,"s")
+    totaltime.setValue(0)
+    footer.appendChild(totaltime.shadow)
+
+    var G1 = new gauge(0,50,1,10,-110,110)
+    G1.svg.setAttribute("width","200px")
+    G1.svg.setAttribute("height","170px")
+    G1.setValue(0)
+    SpeedGauge.appendChild(G1.svg)
+
+    $.get("/getCurrentUser",function(data){
+      if(data=="unknown"){
+        //console.log("user unknown")
+      }else{
+        cUser=data
+        user_img.src="https://www.gravatar.com/avatar/"+md5(cUser.mail)+"?s=50"
+        user_name.innerHTML=data.name
+        users.style.display="none"
+      }
+    })
+    toastr.options = {
+      "newestOnTop": false,
+      "positionClass": "toast-bottom-right",
+    }
+    //login("h.will@klimapartner.de")
+
+    function enableNoSleep() {
+      noSleep.enable();
+      document.removeEventListener('touchstart', enableNoSleep, false);
+    }
+
+    // Enable wake lock.
+    // (must be wrapped in a user input event handler e.g. a mouse or touch handler)
+    document.addEventListener('touchstart', enableNoSleep, false);
+    document.addEventListener('click', enableNoSleep, false);
+  </script>
+
+  </body>
+</html>

@@ -1,0 +1,31 @@
+body{background:#ddd}
+#users{display:flex;flex-direction:row;background:rgba(0,0,0,0.8);position:absolute;top:0px;left:0px;width:100%;height:100%;align-items:center;justify-content: center;}
+
+.user_select{width:150px;height:200px;border:1px solid black;flex-direction:column;padding:10px;margin:10px;background:white}
+.user_select img{width:150px;height:150px;margin-bottom:10px}
+#user_info{display:flex;align-items:center;}
+#user_info #user_img{width:50px;height:50px;border-radius:25px;margin:4px}
+#user_info #user_name{color:white;font-size:20px}
+
+#speed{font-family:'Black Ops One';font-size:20px;fill:gray}
+.outer_gauge_circle{fill:none;stroke:none;stroke-width:5px}
+.outer_gauge_circle3{fill:none;stroke:#333;stroke-width:1px}
+.outer_gauge_circle2{fill:none;stroke:none;stroke-width:4px;filter:url(#blur)}
+.gauge_tick_line{fill:#ddd;stroke:#333;stroke-width:0.2}
+.gauge_tick_line2{fill:#ddd;stroke:#333;stroke-width:0.5}
+.gauge_tick_text{fill:#333;text-anchor:middle;font-size:7px;font-family:'Black Ops One'}
+.gauge_needle{fill:red;}
+
+#main_container{display:flex;flex-direction:column;position:absolute;top:0;bottom:0;left:0;right:0}
+#header{height:64px;background:#3D3DFF;display:flex;flex-direction:row}
+#content{flex:auto;}
+#footer{height:40px;background:#3D3DFF;color:white;display:flex;flex-direction:row;align-items:center;}
+
+.card{background:white;box-shadow: 2px 2px 5px #888888;margin:5px;padding:5px}
+.digit_display{font-family:'Black Ops One';font-size:20px;margin:3px;justify-content: flex-start;}
+.digit_display .num2{margin-right:3px;font-size:0.7em}
+.digit_display .komma{display:none}
+.digit_display .unit{font-family:'Squada One';}
+ #footer .num1{color:white}
+ #footer .num2{color:white}
+.page{display:flex;flex-wrap:wrap;}
